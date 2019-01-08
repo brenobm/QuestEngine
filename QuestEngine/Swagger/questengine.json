@@ -1,0 +1,154 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Quest Engine",
+    "description": "Quest Engine for Slot Games"
+  },
+  "schemas": [
+    "http"
+  ],
+  "host": "http://localhost",
+  "paths": {
+    "/api/progress": {
+      "post": {
+        "tags": [
+          "Progress"
+        ],
+        "operationId": "Progress_PostProgress",
+        "summary": "Update the Player progress on the active quest",
+        "description": "Update the Player progress on the active quest",
+        "parameters": [
+          {
+            "name": "Request",
+            "in": "body",
+            "description": "Progress Input",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ProgressInput"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Progress Output",
+            "schema": {
+              "$ref": "#/definitions/ProgressOutput"
+            }
+          }
+        }
+      }
+    },
+    "/api/state/{playerId}": {
+      "get": {
+        "tags": [
+          "State"
+        ],
+        "operationId": "State_GetStatePlayer",
+        "summary": "Show the state of the player on the active quest",
+        "description": "Show the state of the player on the active quest",
+        "parameters": [
+          {
+            "name": "playerId",
+            "in": "path",
+            "description": "Player Id",
+            "required": true,
+            "type": "string" 
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "State Output",
+            "schema": {
+              "$ref": "#/definitions/StateOutput" 
+            } 
+          } 
+        } 
+      } 
+    } 
+  },
+  "definitions": {
+    "ProgressInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "PlayerId",
+        "PlayerLevel",
+        "ChipAmountBet"
+      ],
+      "properties": {
+        "PlayerId": {
+          "type": "string"
+        },
+        "PlayerLevel": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "ChipAmountBet": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "Milestone": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "MilestoneIndex",
+        "ChipsAwarded"
+      ],
+      "properties": {
+        "MilestoneIndex": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "ChipsAwarded": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "ProgressOutput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "QuestPointsEarned",
+        "TotalQuestPercentCompleted",
+        "MilestonesCompleted"
+      ],
+      "properties": {
+        "QuestPointsEarned": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "TotalQuestPercentCompleted": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "MilestonesCompleted": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Milestone"
+          }
+        }
+      }
+    },
+    "StateOutput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "TotalQuestPercentCompleted"
+      ],
+      "properties": {
+        "TotalQuestPercentCompleted": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "LastMilestoneIndexCompleted": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    } 
+  }
+}
